@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+
+    <span id="serverTime"></span>
+
+    <br />
+
+    <span id="serverMessage"></span>
+
+
+    <script src="Scripts/jquery-1.6.4.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.3.0.min.js"></script>
+    <script src="/SignalR/hubs"></script>
+
+
+    <script>
+
+        $.connection.hub.start().done(function () {
+
+            $.connection.myHub.server.broadCastServerTime();
+
+        });
+
+        $.connection.myHub.client.DateReciever = function (message) {
+            $("#serverTime").text(message);
+        };
+
+        $.connection.myHub.client.MessageReciever = function (message) {
+            $("#serverMessage").text(message);
+        };
+
+        function SendToServer() {
+            var textInput = $("#textInput").val();
+
+            $.connection.myHub.server.broadCastServerMessage(textInput);
+        }
+
+    </script>
+
+    <br />
+
+    <label>Text:</label>
+    <input type="text" id="textInput" />
+    <button type="button" onclick="SendToServer()">Send</button>
+
+
+</body>
+</html>
